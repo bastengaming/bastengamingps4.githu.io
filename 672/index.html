@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+<head>
+<meta charset="UTF-8">
+<title>BASTEN GAMING — PS4 HEN 6.72</title>
+
+<style>
+body {
+    background-color:#1a1a1a;
+    font-family: Arial, sans-serif;
+    color:white;
+    text-align:center;
+}
+.button, .button2 {
+    padding:5px 10px;
+    border-radius:6px;
+    font-weight:bold;
+}
+.content {
+    width:90%;
+    margin:auto;
+    margin-top:40px;
+    background:rgba(0,0,0,0.4);
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 0 20px red;
+}
+.yellow {
+    color:#ffdd55;
+}
+.hue {
+    padding:8px 12px;
+    border-radius:10px;
+    background:rgba(255,0,0,0.4);
+    box-shadow:0 0 20px red;
+}
+</style>
+
+<script>
+window.onload = function(){
+    document.getElementById("passCounter").innerHTML = localStorage.passcount672 || 0;
+    document.getElementById("failCounter").innerHTML = localStorage.failcount672 || 0;
+}
+</script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<h1 style='font-size:25px;text-shadow:0 0 12px red; color:#ffcccc; margin-top:20px;'>
+
+<a class="button" style="color: #00ff00; text-shadow:0 0 6px #00ff00;">
+Pass = <span id="passCounter">0</span>
+</a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<span style="font-size:26px; font-weight:bold; color:#ffdddd; text-shadow:0 0 10px red;">
+BASTEN GAMING — PS4 HEN 6.72
+</span>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a class="button2" style="color: #ff4444; text-shadow:0 0 6px #ff0000;">
+Fail = <span id="failCounter">0</span>
+</a>
+
+</h1>
+
+
+<h1 id="msgs" style='font-size:25px;text-shadow:0 0 15px red;'>Status</h1>
+
+
+<!-- BUTTON MENU -->
+<div style="width:100%; text-align:center; margin-top:30px;">
+
+<!-- GOLDHEN -->
+<a href="GoldHen2.1.2.html">
+    <button class="pointer" style="width:260px;height:50px;">GoldHenV2.1.2</button>
+</a>
+
+<a href="GoldHen2.3.html">
+    <button class="pointer" style="width:260px;height:50px;">GoldHenV2.3</button>
+</a>
+
+<a href="GoldHen2.4b16.2.html">
+    <button class="pointer" style="width:260px;height:50px;">GoldHenV2.4b16.2</button>
+</a>
+
+<br><br>
+
+<!-- WEBRTE / PS4DEBUG / ORBIS -->
+<a href="WebRTE.html"><button class="pointer" style="width:260px;height:50px;">WebRTE</button></a>
+<a href="PS4Debug.html"><button class="pointer" style="width:260px;height:50px;">PS4debug</button></a>
+<a href="OrbisToolbox.html"><button class="pointer" style="width:260px;height:50px;">Orbis Toolbox</button></a>
+
+<br><br>
+
+<!-- GROUPS -->
+<a href="ToolsGroup.html"><button class="pointer" style="width:260px;height:50px;">Tools Group</button></a>
+<a href="HENGroup.html"><button class="pointer" style="width:260px;height:50px;">HEN Group</button></a>
+<a href="RestoreGroup.html"><button class="pointer" style="width:260px;height:50px;">Restore Group</button></a>
+
+<br><br>
+
+<a href="DumpGroup.html"><button class="pointer" style="width:260px;height:50px;">Dump Group</button></a>
+<a href="LinuxGroup.html"><button class="pointer" style="width:260px;height:50px;">Linux Group</button></a>
+<a href="GTAV_RDR2_Mods.html"><button class="pointer" style="width:260px;height:50px;">GtaV & RDR2 Mods Group</button></a>
+
+</div>
+
+
+
+<!-- FOOTER -->
+<div class="content">
+<br>
+<span class="yellow">Designed & Compiled by :</span>
+&nbsp;&nbsp;
+<a class="hue">Basten Gaming</a>
+
+<br><br><br>
+
+<span class="yellow">Special Thanks :</span>
+&nbsp;&nbsp;
+<a style="color:white;text-shadow:0 0 6px red;">
+Sleirsgoevy, Leeful, AlAzif, SiSTRo, ...
+</a>
+
+<br><br>
+</div>
+
+
+</body>
+</html>
