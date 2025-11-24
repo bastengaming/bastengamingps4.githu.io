@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Basten Gaming Host 11.00 FW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- STYLE GLOBAL -->
+<link rel="stylesheet" type="text/css" href="../Style.css">
+
+</head>
+
+<body>
+
+<!-- DATE + STATUS BAR -->
+<div id="date" class="date"></div>
+<span id="done" class="done">Pass = 0</span>
+<span class="Title">Basten Gaming Host 11.00 FW</span>
+<span id="fail" class="fail">Fail = 0</span>
+<div id="clock" class="clock"></div>
+
+<br><br><br>
+
+<!-- TITLE -->
+<div class="header2">Status</div>
+
+<br>
+
+<!-- START PAYLOAD GRID (SAMA PERSIS 6.72) -->
+<div class="grid-container">
+
+    <div class="item glow">
+        <button onclick="load_disable()">Disable Updates</button>
+    </div>
+
+    <div class="item glow">
+        <button onclick="load_enable()">Enable Updates</button>
+    </div>
+
+    <div class="item glow">
+        <button onclick="load_ftp()">FTP Server</button>
+    </div>
+
+    <div class="item glow">
+        <button onclick="load_fan()">Fan Control</button>
+    </div>
+
+    <div class="item glow">
+        <button onclick="load_webrte()">WebRTE</button>
+    </div>
+
+</div>
+
+<br><br><br>
+
+<!-- FOOTER -->
+<div class="footer2">
+Customized by : <span class="hue">Basten Gaming</span>
+</div>
+
+<script>
+/* =====================
+   PAYLOAD HANDLERS FW11
+   ===================== */
+
+function load_disable()     { load_payload("disable-updates.bin"); }
+function load_enable()      { load_payload("enable-updates.bin"); }
+function load_ftp()         { load_payload("ftp.bin"); }
+function load_fan()         { load_payload("fan-threshold.bin"); }
+function load_webrte()      { load_payload("WebRTE.bin"); }
+
+/* FUNGSI LOADER GLOBAL (SAMA DENGAN 6.72) */
+function load_payload(name){
+    alert("Loading: " + name);
+    fetch(name);
+}
+</script>
+
+</body>
+</html>
