@@ -1,19 +1,16 @@
+
 CACHE MANIFEST
-# Basten Gaming Host FW11 manifest
-# Version: 2025-11-24T20:xx:00Z
+# Basten Gaming Host FW11 offline manifest
+# Version: 2025-11-24T20:00:00Z
 
 CACHE:
-
 # main page
 index.html
-
-# root-level CSS (relatif terhadap index.html)
+sendpayload.js
+# root CSS (note: ../Style.css is one level up relative to index)
 ../Style.css
 
-# local scripts (jika ada)
-sw.js
-
-# payloads (folder payload di bawah 1100/)
+# payload folder (exclude goldhen, psfree, exploit, loader)
 payload/app2usb.bin
 payload/app-dumper.bin
 payload/disable-aslr.bin
@@ -23,7 +20,7 @@ payload/enable-updates.bin
 payload/exit-idu.bin
 payload/fan-threshold.bin
 payload/ftp.bin
-# payload/goldhen1100.bin  <-- DIKELUARKAN (sesuai permintaan)
+# payload/goldhen1100.bin   <-- excluded by request
 payload/history-blocker.bin
 payload/kernel-clock.bin
 payload/kernel-dumper.bin
@@ -31,23 +28,18 @@ payload/Linux.bin
 payload/Linux-2gb.bin
 payload/Linux-3gb.bin
 payload/Linux-4gb.bin
-# payload/loader.bin       <-- DIKELUARKAN
 payload/module-dumper.bin
 payload/permanent-uart.bin
 payload/ps4-debug_v1.1.16.bin
 payload/ps4-sflash0-dumper.bin
-# payload/psfree.js        <-- DIKELUARKAN
 payload/pup-decrypt.bin
 payload/restore.bin
 payload/rif-renamer.bin
 payload/todex.bin
 payload/WebRTE.bin
 
-# any images or logos you want cached (if ada)
-# ../LOGOMERK_TRANSPARENT.png
-
-# optionally cache other root files used by your host
-# ../another-file.js
-
 NETWORK:
 *
+
+FALLBACK:
+/ /offline.html

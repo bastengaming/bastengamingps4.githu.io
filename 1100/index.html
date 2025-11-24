@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Basten Gaming Host 11.00 FW (Offline)</title>
+
+<!-- PENTING: pastikan ../Style.css ada -->
+<link rel="stylesheet" href="../Style.css">
+
+<style>
+/* Local tweaks (compact buttons like Karo) */
+body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 24px}
+.Title{font-size:22px;color:#ffd700;font-weight:bold}
+.header2{color:#fff;font-size:20px;margin:8px 48px}
+.grid-container{width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:center;justify-items:center}
+.item{width:200px;display:flex;justify-content:center}
+.item button{width:100%;max-width:200px;height:42px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;padding:0}
+.footer{margin-top:40px;text-align:center;color:#ffd700}
+.ipbox{display:inline-block;margin-left:8px;padding:4px 6px;border-radius:6px;background:#222;color:#fff}
+.small{font-size:13px;color:#ccc}
+.center{ text-align:center;}
+.controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px}
+.progress{color:#fff;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<!-- STATUS / HEADER -->
+<div class="statusbar">
+  <div id="date" style="font-size:16px;">&nbsp;</div>
+  <div style="text-align:center;">
+    <span id="done" style="color:#1fb200;font-weight:700;margin-right:12px">Pass = 0</span>
+    <span class="Title">Basten Gaming Host 11.00 FW (Offline)</span>
+    <span id="fail" style="color:#ff0000;font-weight:700;margin-left:12px">Fail = 0</span>
+  </div>
+  <div id="clock" style="font-size:16px;">00:00</div>
+</div>
+
+<div class="header2">Status</div>
+
+<!-- Controls: PS4 IP entry / detect -->
+<div class="center">
+  <div class="controls">
+    <label class="small">PS4 IP:</label>
+    <input id="ps4ip" class="ipbox" placeholder="192.168.1.10" />
+    <button id="saveip">Save</button>
+    <button id="detect">Detect</button>
+    <button id="checkbin">Check BinServer</button>
+  </div>
+  <div class="progress" id="progress">Cache status: —</div>
+</div>
+
+<!-- PAYLOAD GRID -->
+<div class="grid-container" role="navigation" aria-label="Payload list">
+
+  <!-- Row 1 -->
+  <div class="item glow"><button onclick="send('payload/ftp.bin')">FTP</button></div>
+  <div class="item glow"><button onclick="send('payload/app2usb.bin')">App2USB</button></div>
+  <div class="item glow"><button onclick="send('payload/todex.bin')">ToDex Enable</button></div>
+
+  <!-- Row 2 -->
+  <div class="item glow"><button onclick="send('payload/kernel-dumper.bin')">Kernel Dumper</button></div>
+  <div class="item glow"><button onclick="send('payload/module-dumper.bin')">Module Dumper</button></div>
+  <div class="item glow"><button onclick="send('payload/disable-updates.bin')">Disable Updates</button></div>
+
+  <!-- Row 3 -->
+  <div class="item glow"><button onclick="send('payload/exit-idu.bin')">Exit IDU</button></div>
+  <div class="item glow"><button onclick="send('payload/fan-threshold.bin')">Fan Control</button></div>
+  <div class="item glow"><button onclick="send('payload/enable-updates.bin')">Enable Updates</button></div>
+
+  <!-- Row 4 -->
+  <div class="item glow"><button onclick="send('payload/history-blocker.bin')">History Blocker</button></div>
+  <div class="item glow"><button onclick="send('payload/rif-renamer.bin')">RIF Renamer</button></div>
+  <div class="item glow"><button onclick="send('payload/disable-aslr.bin')">Disable ASLR</button></div>
+
+  <!-- Row 5: Linux group -->
+  <div class="item glow"><button onclick="send('payload/Linux.bin')">Linux Default</button></div>
+  <div class="item glow"><button onclick="send('payload/Linux-2gb.bin')">Linux 2GB</button></div>
+  <div class="item glow"><button onclick="send('payload/Linux-3gb.bin')">Linux 3GB</button></div>
+
+  <!-- Row 6 -->
+  <div class="item glow"><button onclick="send('payload/Linux-4gb.bin')">Linux 4GB</button></div>
+  <div class="item glow"><button onclick="send('payload/permanent-uart.bin')">Permanent UART</button></div>
+  <div class="item glow"><button onclick="send('payload/WebRTE.bin')">WebRTE</button></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>Customized by : <span style="background:#333;padding:6px 10px;border-radius:8px;color:#fff">Basten Gaming</span></div>
+  <div style="margin-top:6px">© 2017–2025 Basten Gaming – Custom PS4 Host</div>
+</div>
+
+<!-- load sender helper -->
+<script src="sendpayload.js"></script>
+
+<script>
+/* small client-side helpers for UI */
+(function(){
+  const d = new Date();
+  document.getElementById('date').textContent = d.toLocaleDateString();
+  function tick(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString(); }
+  tick(); setInterval(tick,1000);
+
+  const ipInput = document.getElementById('ps4ip');
+  const saved = localStorage.getItem('ps4ip');
+  if(saved) ipInput.value = saved;
+
+  document.getElementById('saveip').onclick = ()=>{
+    if(ipInput.value.trim()) { localStorage.setItem('ps4ip', ipInput.value.trim()); alert('Saved PS4 IP'); }
+  };
+
+  // quick detect: try common local IPs? we provide basic probe
+  document.getElementById('detect').onclick = async ()=>{
+    const tries = ['192.168.1.10','192.168.1.11','192.168.0.10','192.168.0.20'];
+    document.getElementById('progress').textContent = 'Detecting...';
+    for(const ip of tries){
+      try{
+        let r = await fetch('http://'+ip+':9021/ping',{mode:'no-cors'});
+        // if no-cors fetch doesn't throw, assume it's reachable
+        document.getElementById('ps4ip').value = ip;
+        localStorage.setItem('ps4ip', ip);
+        document.getElementById('progress').textContent = 'Detected PS4 at ' + ip;
+        return;
+      }catch(e){}
+    }
+    document.getElementById('progress').textContent = 'Auto-detect failed. Enter IP manually.';
+  };
+
+  document.getElementById('checkbin').onclick = async ()=>{
+    const ip = document.getElementById('ps4ip').value.trim();
+    if(!ip){ alert('Enter PS4 IP first'); return; }
+    document.getElementById('progress').textContent = 'Checking BinServer on '+ip+':9021 ...';
+    try{
+      const res = await fetch('http://'+ip+':9021/ping', {method:'GET', mode:'cors'});
+      if(res.ok){ document.getElementById('progress').textContent = 'BinServer is reachable'; }
+      else document.getElementById('progress').textContent = 'BinServer responded: ' + res.status;
+    }catch(e){
+      document.getElementById('progress').textContent = 'BinServer unreachable (make sure GoldHEN running)';
+    }
+  };
+
+  // show app cache status (if available)
+  try {
+    if (window.applicationCache) {
+      document.getElementById('progress').textContent = 'AppCache status: ' + window.applicationCache.status;
+      window.applicationCache.onprogress = function(e){ document.getElementById('progress').textContent = 'Cache in progress...'; };
+      window.applicationCache.oncached = function(){ document.getElementById('progress').textContent = 'Cache complete (offline ready)'; };
+      window.applicationCache.onnoupdate = function(){ document.getElementById('progress').textContent = 'No update for cache'; };
+    }
+  } catch(e){}
+})();
+</script>
+
+</body>
+</html>
+
+
