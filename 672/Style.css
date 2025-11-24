@@ -510,65 +510,54 @@ text-shadow: 4px 4px 4px black;
  font-size:32px;
 }
 /* ===========================
-   BASTEN GAMING RED–BLACK THEME
+   FINAL RED–BLACK GLOSSY STYLE
    =========================== */
 
-/* Background utama hitam pekat */
+/* Background full hitam */
 html, body {
     background: #000000 !important;
 }
 
-/* Tombol utama menjadi merah glossy */
+/* Tombol merah glossy dengan glow kuat */
 button {
-    background: linear-gradient(#ff4d4d, #b30000) !important;
-    border: 2px solid #720000 !important;
+    background: linear-gradient(#ff4b4b, #c40000) !important;
+    border: 2px solid #860000 !important;
     color: #ffffff !important;
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.45) !important;
+    font-weight: bold !important;
+
+    /* Glow tebal ala screenshot */
+    box-shadow: 
+        0 0 12px rgba(255, 0, 0, 0.9),
+        0 0 22px rgba(255, 0, 0, 0.8),
+        0 0 32px rgba(255, 0, 0, 0.6) !important;
+
+    transition: 0.2s ease-in-out;
 }
 
-/* Hover glow merah terang */
+/* Hover = lebih terang + glow membesar */
 button:hover {
-    background: linear-gradient(#ff6666, #cc0000) !important;
-    box-shadow: 0 0 40px rgba(255, 0, 0, 0.75) !important;
-    border-color: #ff1a1a !important;
-    color: #ffffff !important;
+    background: linear-gradient(#ff7373, #ff0000) !important;
+    border-color: #ff2a2a !important;
+
+    box-shadow:
+        0 0 18px rgba(255, 0, 0, 1),
+        0 0 30px rgba(255, 0, 0, 0.9),
+        0 0 45px rgba(255, 0, 0, 0.7) !important;
 }
 
-/* Header bar merah gelap */
-header {
-    background: linear-gradient(#4d0000, #1a0000) !important;
-    border-bottom: 3px solid red !important;
-}
-
-/* Tulisan judul – glow merah lembut */
+/* Judul & label group warna emas */
 .title, .Title {
-    color: #ffb8a8 !important;
-    text-shadow: 0 0 12px rgba(255, 70, 70, 0.5) !important;
+    color: #ffd97d !important;
+    text-shadow: 0 0 10px rgba(255, 200, 80, 0.6) !important;
 }
 
-/* Box / panel hitam transparan */
+/* Footer glow hijau untuk "Basten Gaming" */
+.hue, #customizedTag {
+    background: rgba(0, 255, 100, 0.35) !important;
+    box-shadow: 0 0 35px rgba(0, 255, 100, 0.9) !important;
+}
+
+/* Panel tetap transparan gelap */
 .content, .bg-darker {
     background: rgba(0, 0, 0, 0.55) !important;
-}
-
-/* Divider merah */
-hr {
-    border-color: rgba(255, 0, 0, 0.5) !important;
-}
-
-/* Glow kuning dipertahankan tapi diperhalus */
-.hue {
-    box-shadow: 0px 0px 35px rgba(255, 255, 0, 0.7) !important;
-}
-
-/* Icon / teks hijau ↑ (PASS) tetap, FAIL merah diperkuat */
-#done { color: #00ff28 !important; }
-#fail { color: #ff0000 !important; }
-
-/* Waktu & tanggal tetap putih */
-#clock, #date { color: #ffffff !important; }
-
-/* Panel loading background */
-.cacheUPDbg {
-    background-color: #0f0f0f !important;
 }
