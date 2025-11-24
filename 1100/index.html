@@ -6,11 +6,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Basten Gaming Host 11.00 FW (Offline)</title>
 
-<!-- PENTING: pastikan ../Style.css ada -->
+<!-- Pastikan Style.css ada di root (satu level atas) -->
 <link rel="stylesheet" href="../Style.css">
 
 <style>
-/* Local tweaks (compact buttons like Karo) */
+/* Local tweaks (compact buttons) */
 body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
 .statusbar{display:flex;justify-content:space-between;align-items:center;padding:6px 24px}
 .Title{font-size:22px;color:#ffd700;font-weight:bold}
@@ -19,9 +19,12 @@ body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
 .item{width:200px;display:flex;justify-content:center}
 .item button{width:100%;max-width:200px;height:42px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;padding:0}
 .footer{margin-top:40px;text-align:center;color:#ffd700}
+
+/* HIDDEN UI for IP (keperluan fallback only) */
+#network-tools { display:none; } /* <-- disembunyikan, deteksi otomatis berjalan di background */
 .ipbox{display:inline-block;margin-left:8px;padding:4px 6px;border-radius:6px;background:#222;color:#fff}
 .small{font-size:13px;color:#ccc}
-.center{ text-align:center;}
+.center{text-align:center;}
 .controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px}
 .progress{color:#fff;margin-bottom:8px}
 </style>
@@ -41,8 +44,8 @@ body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
 
 <div class="header2">Status</div>
 
-<!-- Controls: PS4 IP entry / detect -->
-<div class="center">
+<!-- Network tools (HIDDEN) -->
+<div id="network-tools" class="center">
   <div class="controls">
     <label class="small">PS4 IP:</label>
     <input id="ps4ip" class="ipbox" placeholder="192.168.1.10" />
@@ -53,35 +56,32 @@ body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
   <div class="progress" id="progress">Cache status: —</div>
 </div>
 
+<!-- Visible progress (user sees only this) -->
+<div class="center"><div class="progress" id="progress-visible">Cache status: —</div></div>
+
 <!-- PAYLOAD GRID -->
 <div class="grid-container" role="navigation" aria-label="Payload list">
 
-  <!-- Row 1 -->
   <div class="item glow"><button onclick="send('payload/ftp.bin')">FTP</button></div>
   <div class="item glow"><button onclick="send('payload/app2usb.bin')">App2USB</button></div>
   <div class="item glow"><button onclick="send('payload/todex.bin')">ToDex Enable</button></div>
 
-  <!-- Row 2 -->
   <div class="item glow"><button onclick="send('payload/kernel-dumper.bin')">Kernel Dumper</button></div>
   <div class="item glow"><button onclick="send('payload/module-dumper.bin')">Module Dumper</button></div>
   <div class="item glow"><button onclick="send('payload/disable-updates.bin')">Disable Updates</button></div>
 
-  <!-- Row 3 -->
   <div class="item glow"><button onclick="send('payload/exit-idu.bin')">Exit IDU</button></div>
   <div class="item glow"><button onclick="send('payload/fan-threshold.bin')">Fan Control</button></div>
   <div class="item glow"><button onclick="send('payload/enable-updates.bin')">Enable Updates</button></div>
 
-  <!-- Row 4 -->
   <div class="item glow"><button onclick="send('payload/history-blocker.bin')">History Blocker</button></div>
   <div class="item glow"><button onclick="send('payload/rif-renamer.bin')">RIF Renamer</button></div>
   <div class="item glow"><button onclick="send('payload/disable-aslr.bin')">Disable ASLR</button></div>
 
-  <!-- Row 5: Linux group -->
   <div class="item glow"><button onclick="send('payload/Linux.bin')">Linux Default</button></div>
   <div class="item glow"><button onclick="send('payload/Linux-2gb.bin')">Linux 2GB</button></div>
   <div class="item glow"><button onclick="send('payload/Linux-3gb.bin')">Linux 3GB</button></div>
 
-  <!-- Row 6 -->
   <div class="item glow"><button onclick="send('payload/Linux-4gb.bin')">Linux 4GB</button></div>
   <div class="item glow"><button onclick="send('payload/permanent-uart.bin')">Permanent UART</button></div>
   <div class="item glow"><button onclick="send('payload/WebRTE.bin')">WebRTE</button></div>
@@ -98,64 +98,53 @@ body{background:#0b0b0b;color:#fff;font-family:Arial,Helvetica,sans-serif;}
 <script src="sendpayload.js"></script>
 
 <script>
-/* small client-side helpers for UI */
+/* UI helpers + auto-detect starter (hidden) */
 (function(){
+  // set date/time
   const d = new Date();
   document.getElementById('date').textContent = d.toLocaleDateString();
   function tick(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString(); }
   tick(); setInterval(tick,1000);
 
-  const ipInput = document.getElementById('ps4ip');
-  const saved = localStorage.getItem('ps4ip');
-  if(saved) ipInput.value = saved;
-
-  document.getElementById('saveip').onclick = ()=>{
-    if(ipInput.value.trim()) { localStorage.setItem('ps4ip', ipInput.value.trim()); alert('Saved PS4 IP'); }
-  };
-
-  // quick detect: try common local IPs? we provide basic probe
-  document.getElementById('detect').onclick = async ()=>{
-    const tries = ['192.168.1.10','192.168.1.11','192.168.0.10','192.168.0.20'];
-    document.getElementById('progress').textContent = 'Detecting...';
-    for(const ip of tries){
-      try{
-        let r = await fetch('http://'+ip+':9021/ping',{mode:'no-cors'});
-        // if no-cors fetch doesn't throw, assume it's reachable
-        document.getElementById('ps4ip').value = ip;
-        localStorage.setItem('ps4ip', ip);
-        document.getElementById('progress').textContent = 'Detected PS4 at ' + ip;
-        return;
-      }catch(e){}
-    }
-    document.getElementById('progress').textContent = 'Auto-detect failed. Enter IP manually.';
-  };
-
-  document.getElementById('checkbin').onclick = async ()=>{
-    const ip = document.getElementById('ps4ip').value.trim();
-    if(!ip){ alert('Enter PS4 IP first'); return; }
-    document.getElementById('progress').textContent = 'Checking BinServer on '+ip+':9021 ...';
-    try{
-      const res = await fetch('http://'+ip+':9021/ping', {method:'GET', mode:'cors'});
-      if(res.ok){ document.getElementById('progress').textContent = 'BinServer is reachable'; }
-      else document.getElementById('progress').textContent = 'BinServer responded: ' + res.status;
-    }catch(e){
-      document.getElementById('progress').textContent = 'BinServer unreachable (make sure GoldHEN running)';
-    }
-  };
-
-  // show app cache status (if available)
+  // show applicationCache status in visible progress
   try {
     if (window.applicationCache) {
-      document.getElementById('progress').textContent = 'AppCache status: ' + window.applicationCache.status;
-      window.applicationCache.onprogress = function(e){ document.getElementById('progress').textContent = 'Cache in progress...'; };
-      window.applicationCache.oncached = function(){ document.getElementById('progress').textContent = 'Cache complete (offline ready)'; };
-      window.applicationCache.onnoupdate = function(){ document.getElementById('progress').textContent = 'No update for cache'; };
+      const v = document.getElementById('progress-visible');
+      window.applicationCache.onprogress = function(e){ v.textContent = 'Cache in progress...'; };
+      window.applicationCache.oncached = function(){ v.textContent = 'Cache complete (offline ready)'; };
+      window.applicationCache.onnoupdate = function(){ v.textContent = 'No update for cache'; };
+      window.applicationCache.onerror = function(){ v.textContent = 'Cache error'; };
     }
-  } catch(e){}
+  }catch(e){}
+
+  // attempt to auto-detect PS4 IP in background (hidden UI)
+  // if found -> stored in localStorage and used by sendpayload
+  (function autoDetectHidden(){
+    const saved = localStorage.getItem('ps4ip');
+    if(saved && saved.trim()) {
+      // already saved -> nothing to do
+      console.log('[autoDetect] PS4 IP already saved:', saved);
+      return;
+    }
+    // start background detection (non-blocking)
+    if (typeof tryDetectPS4 === 'function') {
+      // tryDetectPS4 defined in sendpayload.js
+      tryDetectPS4().then(ip=>{
+        if(ip){
+          localStorage.setItem('ps4ip', ip);
+          console.log('[autoDetect] detected PS4 IP:', ip);
+          try { document.getElementById('progress-visible').textContent = 'PS4 detected: ' + ip; } catch(e){}
+        } else {
+          console.log('[autoDetect] no PS4 found automatically');
+        }
+      }).catch(err=>{
+        console.log('[autoDetect] error during detect:', err);
+      });
+    }
+  })();
+
 })();
 </script>
 
 </body>
 </html>
-
-
