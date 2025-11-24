@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# Basten Gaming FW 11.00 manifest
+index.html
+payload/goldhen1100.bin
+payload/exploit.js
+payload/psfree.js
+payload/loader.bin
+NETWORK:
+*
