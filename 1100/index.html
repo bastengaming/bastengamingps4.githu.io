@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Basten Gaming Host 11.00 FW</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+<link rel="stylesheet" href="../Style.css">
+
+<style>
+
+/* Tombol compact seperti Karo Host */
+.grid-container {
+  width: 780px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  align-items: center;
+  justify-items: center;
+}
+
+.item {
+  width: 200px;
+  display:flex;
+  justify-content:center;
+}
+
+.item button {
+  width: 100%;
+  max-width: 200px;
+  height: 42px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Title header (match Basten Gaming style) */
+.Title {
+  font-size:22px;
+  color:#ffd700;
+  font-weight:bold;
+  margin:0 18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- STATUS BAR -->
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 24px;">
+  <div id="date" style="font-size:18px;color:#fff;">24/11/2025</div>
+
+  <div style="text-align:center;">
+    <span id="done" style="color:#1fb200; font-weight:700; margin-right:12px;">Pass = 0</span>
+    <span class="Title">Basten Gaming Host 11.00 FW</span>
+    <span id="fail" style="color:#ff0000; font-weight:700; margin-left:12px;">Fail = 0</span>
+  </div>
+
+  <div id="clock" style="font-size:18px;color:#fff;">00:00</div>
+</div>
+
+<!-- TITLE -->
+<div class="header2" style="text-align:left; margin:18px 48px; color:#fff; font-size:20px;">Status</div>
+
+<!-- GRID BUTTONS -->
+<div class="grid-container">
+
+  <div class="item glow"><button onclick="load_payload('payload/ftp.bin')">FTP</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/app2usb.bin')">App2USB</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/todex.bin')">ToDex Enable</button></div>
+
+  <div class="item glow"><button onclick="load_payload('payload/kernel-dumper.bin')">Kernel Dumper</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/module-dumper.bin')">Module Dumper</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/disable-updates.bin')">Disable Updates</button></div>
+
+  <div class="item glow"><button onclick="load_payload('payload/exit-idu.bin')">Exit IDU</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/fan-threshold.bin')">Fan Control</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/enable-updates.bin')">Enable Updates</button></div>
+
+  <div class="item glow"><button onclick="load_payload('payload/history-blocker.bin')">History Blocker</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/rif-renamer.bin')">RIF Renamer</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/disable-aslr.bin')">Disable ASLR</button></div>
+
+  <div class="item glow"><button onclick="load_payload('payload/Linux.bin')">Linux Default</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/Linux-2gb.bin')">Linux 2GB</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/Linux-3gb.bin')">Linux 3GB</button></div>
+
+  <div class="item glow"><button onclick="load_payload('payload/Linux-4gb.bin')">Linux 4GB</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/permanent-uart.bin')">Permanent UART</button></div>
+  <div class="item glow"><button onclick="load_payload('payload/WebRTE.bin')">WebRTE</button></div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:60px; text-align:center;">
+  <div class="footer2">Customized by : <span class="hue">Basten Gaming</span></div>
+  <div style="margin-top:6px; color:#ffd700;">© 2017–2025 Basten Gaming – Custom PS4 Host</div>
+</div>
+
+<script>
+function load_payload(file) {
+  fetch(file).then(resp => resp.arrayBuffer()).then(buf=>{
+    alert("Payload loaded: " + file + " (" + buf.byteLength + " bytes)");
+  }).catch(err=>{
+    alert("Payload failed:\n" + err);
+  });
+}
+</script>
+
+</body>
+</html>
+
